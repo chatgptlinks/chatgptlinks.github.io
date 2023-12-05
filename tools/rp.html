@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随机密码生成器</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-color: #f8f9fa;
+        }
+        h1 {
+            color: #007bff;
+        }
+        #password-container {
+            margin: 20px auto;
+            padding: 20px;
+            width: 400px; /* 固定宽度 */
+            height: 250px; /* 固定高度 */
+            background-color: #ffffff;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        #password {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            user-select: all;
+            color: #007bff;
+            font-weight: bold;
+            width: 100%; /* 宽度100% */
+            overflow: hidden; /* 溢出隐藏 */
+            white-space: nowrap; /* 不换行 */
+        }
+        label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            color: #007bff;
+            text-align: left;
+        }
+        label span {
+            margin-right: 10px;
+        }
+        input {
+            padding: 10px;
+            font-size: 1em;
+            width: 60px; /* 调整输入框的宽度 */
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        .checkbox-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .checkbox-group label {
+            flex: 1;
+            margin-right: 10px;
+        }
+        .checkbox-group input {
+            flex: 1;
+            margin-right: 10px;
+        }
+        button {
+            font-size: 1em;
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+        #copyButton {
+            font-size: 1em;
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>随机密码生成器</h1>
+
+<div id="password-container">
+    <label for="passwordLength">选择密码长度（最多64位）：<span><input type="number" id="passwordLength" min="1" max="64" value="16"></span></label>
+    
+    <div id="password"></div>
+    
+    <div class="checkbox-group">
+        <label for="includeUppercase">大写字母</label>
+        <input type="checkbox" id="includeUppercase" checked>
+        
+        <label for="includeLowercase">小写字母</label>
+        <input type="checkbox" id="includeLowercase" checked>
+        
+        <label for="includeNumbers">数字</label>
+        <input type="checkbox" id="includeNumbers" checked>
+        
+        <label for="includeSpecialChars">特殊字符</label>
+        <input type="checkbox" id="includeSpecialChars" checked>
+    </div>
+
+    <button onclick="generatePassword()">生成密码</button>
+    <button id="copyButton" onclick="copyToClipboard()">复制密码</button>
+</div>
+
+<script>
+    function generateRandomChar() {
+        const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
+        const numberChars = '0123456789';
+        const specialChars = '!@#$%^&*()-_=+';
+        
+        let chars = '';
+        
+        if (document.getElementById('includeUppercase').checked) {
+            chars += uppercaseChars;
+        }
+        if (document.getElementById('includeLowercase').checked) {
+            chars += lowercaseChars;
+        }
+        if (document.getElementById('includeNumbers').checked) {
+            chars += numberChars;
+        }
+        if (document.getElementById('includeSpecialChars').checked) {
+            chars += specialChars;
+        }
+
+        return chars[Math.floor(Math.random() * chars.length)];
+    }
+
+    function generatePassword() {
+        const passwordLength = document.getElementById('passwordLength').valueAsNumber || 16;
+        let password = '';
+
+        // 生成剩余的随机字符
+        for (let i = 0; i < passwordLength; i++) {
+            password += generateRandomChar();
+        }
+
+        // 打乱密码中的字符顺序
+        password = password.split('').sort(() => Math.random() - 0.5).join('');
+
+        const passwordElement = document.getElementById('password');
+        passwordElement.textContent = password;
+        passwordElement.setAttribute('data-password', password); // Store the password in a data attribute
+    }
+
+    function copyToClipboard() {
+        const passwordElement = document.getElementById('password');
+        const password = passwordElement.getAttribute('data-password');
+
+        const textarea = document.createElement('textarea');
+        textarea.value = password;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+
+        alert('密码已复制到剪贴板！');
+    }
+</script>
+
+<script>
+    // 使用 crypto API 获取随机性
+    function getRandomValues(length) {
+        const values = new Uint32Array(length);
+        crypto.getRandomValues(values);
+        return values;
+    }
+
+    // 添加定时器延迟以增加随机性
+    setTimeout(() => {
+        const timeRandom = new Date().getTime() % 10000; // 时间变量
+        const cryptoRandom = getRandomValues(8).join(''); // crypto API 随机性
+        console.log('时间变量:', timeRandom);
+        console.log('Crypto API 随机性:', cryptoRandom);
+    }, 1000);
+</script>
+
+</body>
+</html>

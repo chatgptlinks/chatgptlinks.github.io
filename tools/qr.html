@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二维码生成器</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-color: #f8f9fa;
+        }
+        h1 {
+            color: #007bff;
+        }
+        #qrcode-container {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 400px;
+            background-color: #ffffff;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        #qrcode {
+            margin: 0 auto; /* 居中显示 */
+        }
+        #text-input {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        #text-below-input {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        #generate-button {
+            font-size: 1em;
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+        #footer {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+
+<h1>二维码生成器</h1>
+
+<div id="qrcode-container">
+    <div id="qrcode"></div>
+    <input type="text" id="text-input" placeholder="输入文本" value="https://www.baidu.com/" onclick="selectText('text-input')">
+    <input type="text" id="text-below-input" placeholder="在二维码下方显示的文字" onclick="selectText('text-below-input')">
+    <button id="generate-button" onclick="generateQRCode()">生成二维码</button>
+</div>
+
+<div id="footer">
+    <p>本应用由ChatGPT生成。</p>
+</div>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+    function generateQRCode() {
+        const textInput = document.getElementById('text-input');
+        const textBelowInput = document.getElementById('text-below-input');
+        const qrcodeContainer = document.getElementById('qrcode');
+
+        if (textInput.value.trim() === '') {
+            alert('请输入文本');
+            return;
+        }
+
+        // 清空之前的二维码
+        qrcodeContainer.innerHTML = '';
+
+        // 生成二维码
+        const qrcode = new QRCode(qrcodeContainer, {
+            text: textInput.value,
+            width: 200,
+            height: 200
+        });
+
+        // 在二维码下方显示文字
+        const textBelow = document.createElement('p');
+        textBelow.textContent = textBelowInput.value;
+        qrcodeContainer.appendChild(textBelow);
+    }
+
+    function selectText(elementId) {
+        const inputElement = document.getElementById(elementId);
+        inputElement.select();
+    }
+</script>
+
+</body>
+</html>
