@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>移动设备页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            text-align: center;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+        }
+    </style>
+    <script>
+        // 检测是否是移动设备
+        function isMobileDevice() {
+            return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        }
+
+        // 初始化页面内容
+        function initializePage() {
+            if (isMobileDevice()) {
+                showMobileContent();
+            } else {
+                showDesktopMessage();
+            }
+        }
+
+        // 显示移动设备内容
+        function showMobileContent() {
+            document.getElementById('desktopMessage').style.display = 'none';
+            document.getElementById('mobileContent').style.display = 'block';
+        }
+
+        // 显示桌面设备提示
+        function showDesktopMessage() {
+            document.getElementById('desktopMessage').style.display = 'block';
+            document.getElementById('mobileContent').style.display = 'none';
+        }
+    </script>
+</head>
+<body class="io-grey-mode" onload="initializePage()">
+    <header>
+        <h1>移动设备页面</h1>
+    </header>
+
+    <main>
+        <!-- 提示消息，桌面设备显示 -->
+        <div id="desktopMessage">
+            <p>抱歉，此内容仅适用于移动设备。</p>
+        </div>
+
+        <!-- 移动设备内容，仅在移动设备显示 -->
+        <div id="mobileContent" style="display: none;">
+            <p>这是一个简单的响应式网页，适应移动设备和桌面设备。</p>
+            <!-- 这里添加网页的主要内容 -->
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 你的网站名称</p>
+    </footer>
+</body>
+</html>
